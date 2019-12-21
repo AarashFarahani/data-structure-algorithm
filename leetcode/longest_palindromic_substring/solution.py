@@ -1,26 +1,32 @@
 class Solution:
     def longestPalindrome(self, s: str) -> str:
-        """
-        :type s: str
-        :rtype: str
-        """
-        # Return if string is empty
-        if not s: return s
+        start = end = 0
 
-        res = ""
         for i in range(len(s)):
-            j = i + 1
-            # While j is less than length of string
-            # AND res is *not* longer than substring s[i:]
-            while j <= len(s) and len(res) <= len(s[i:]):
-                # If substring s[i:j] is a palindrome
-                # AND substring is longer than res
-                if s[i:j] == s[i:j][::-1] and len(s[i:j]) > len(res):
-                    res = s[i:j]
-                j += 1
+            len1 = self.expand_around_center(s, i, i)
+            len2 = self.expand_around_center(s, i, i + 1)
+            
+            lenm = max(len1, len2)
 
-        return res
+            if(lenm > end - start):
+                start = i - (lenm - 1) // 2
+                end = i + lenm // 2
 
+        return s[start:end + 1]
 
-result = Solution().longestPalindrome('babad')
+    def expand_around_center(self, s: str, left, right):
+        while left >= 0 and right < len(s) and s[left] == s[right]:
+            left -= 1
+            right += 1
+
+        return right - left - 1
+        
+
+result = Solution().longestPalindrome("babads")
+print(result)
+
+result = Solution().longestPalindrome("cbbd")
+print(result)
+
+result = Solution().longestPalindrome("tattarrattat")
 print(result)
