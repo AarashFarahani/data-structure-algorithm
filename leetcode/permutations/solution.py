@@ -1,27 +1,19 @@
-from typing import Set, List
+from typing import List
 
 class Solution:
-    def __init__(self):
-        self.result = []
-
-    def permute(self, nums: List[int]) -> List[List[int]]:
+    def helper(self, nums, tmp):
+        if len(tmp) == self.nums_len:
+            self.result.append(tmp)
+            return
         for i in range(len(nums)):
-            self.generate(nums, i, [])
+            self.helper(nums[:i] + nums[i+1:], tmp + [nums[i]])
+        
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        self.result = []
+        self.nums_len = len(nums)
+        self.helper(nums, [])
+        return self.result
 
-        return list(self.result)
-
-    def generate(self, nums: List[int], index, found_list, pointer = 0):
-        if pointer >= len(nums):
-            self.result.append(found_list)
-
-            if index < len(nums):
-                self.generate(nums, index + 1, [])
-
-            return []
-
-        found_list.append(nums[pointer - index])
-        return self.generate(nums, index, found_list, pointer + 1)
-            
 
 result = Solution().permute([1, 2, 3])
 for item in result:
